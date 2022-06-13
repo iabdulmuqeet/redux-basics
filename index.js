@@ -1,12 +1,19 @@
-const redux = require('redux');
-const createStore = redux.createStore;
+const { createStore, combineReducers } = require('redux');
 
 const BUY_CAKE = 'BUY_CAKE';
 const BUY_ICECREAM = 'BUY_ICECREAM';
 
-const initialState = {
+// const initialState = {
+// 	noOfCakes: 10,
+// 	noOfIceCreams: 20,
+// };
+
+const initialCakeState = {
 	noOfCakes: 10,
-	noOfIcecreams: 20,
+};
+
+const initialIceCreamState = {
+	noOfIceCreams: 10,
 };
 
 function buyCake() {
@@ -16,14 +23,33 @@ function buyCake() {
 	};
 }
 
-function buyIcecream() {
+function buyIceCxream() {
 	return {
 		type: BUY_ICECREAM,
 		info: 'First redux action',
 	};
 }
 
-const reducer = (state = initialState, action) => {
+// const reducer = (state = initialState, action) => {
+// 	switch (action.type) {
+// 		case BUY_CAKE:
+// 			return {
+// 				...state,
+// 				noOfCakes: state.noOfCakes - 1,
+// 			};
+
+// 		case BUY_ICECREAM:
+// 			return {
+// 				...state,
+// 				noOfIceCreams: state.noOfICecreams - 1,
+// 			};
+
+// 		default:
+// 			return state;
+// 	}
+// };
+
+const cakeReducer = (state = initialCakeState, action) => {
 	switch (action.type) {
 		case BUY_CAKE:
 			return {
@@ -31,10 +57,17 @@ const reducer = (state = initialState, action) => {
 				noOfCakes: state.noOfCakes - 1,
 			};
 
+		default:
+			return state;
+	}
+};
+
+const iceCreamReducer = (state = initialIceCreamState, action) => {
+	switch (action.type) {
 		case BUY_ICECREAM:
 			return {
 				...state,
-				noOfIcecreams: state.noOfIcecreams - 1,
+				noOfIceCreams: state.noOfIceCreams - 1,
 			};
 
 		default:
@@ -42,7 +75,13 @@ const reducer = (state = initialState, action) => {
 	}
 };
 
-const store = createStore(reducer);
+const rootReducer = combineReducers({
+	cake: cakeReducer,
+	iceCream: iceCreamReducer,
+});
+
+// const store = createStore(reducer);
+const store = createStore(rootReducer);
 
 console.log('Initial state:', store.getState());
 
@@ -53,7 +92,7 @@ const unsubscribe = store.subscribe(() =>
 store.dispatch(buyCake());
 store.dispatch(buyCake());
 store.dispatch(buyCake());
-store.dispatch(buyIcecream());
-store.dispatch(buyIcecream());
+store.dispatch(buyIceCxream());
+store.dispatch(buyIceCxream());
 
 unsubscribe();
